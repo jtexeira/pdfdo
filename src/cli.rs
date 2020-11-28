@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use chrono::naive::NaiveDate;
 use std::path::PathBuf;
 use structopt::StructOpt;
 use url::Url;
@@ -20,7 +20,7 @@ pub enum Commands {
         #[structopt(long)]
         cat: Option<String>,
         #[structopt(long)]
-        due_date: Option<DateTime<Utc>>,
+        due_date: Option<NaiveDate>,
         #[structopt(long)]
         file: Option<PathBuf>,
         #[structopt(long)]

@@ -29,7 +29,7 @@ fn main() {
         }
         Commands::Get { id } => {
             if let Some(t) = tasks.get(id) {
-                println!("{}: {}", id, t);
+                println!("{}: {}", id, t.long_print());
             } else {
                 eprintln!("Inexistent task");
             }

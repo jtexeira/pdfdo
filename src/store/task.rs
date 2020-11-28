@@ -1,5 +1,4 @@
-use chrono::serde::ts_seconds_option;
-use chrono::{DateTime, Utc};
+use chrono::naive::NaiveDate;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::path::PathBuf;
@@ -8,10 +7,9 @@ use url::Url;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
     pub name: String,
-    #[serde(with = "ts_seconds_option")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub due_date: Option<DateTime<Utc>>,
+    pub due_date: Option<NaiveDate>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub file: Option<PathBuf>,
@@ -29,14 +27,14 @@ pub struct Task {
 impl fmt::Display for Task {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.cat.as_ref().map(|x| write!(f, "[{}] ", x));
-        writeln!(f, "{}", self.name);
+        writeln!(f, "{}", self.name)?;
         Ok(())
     }
 }
 
 impl Task {
     pub fn new(
-        due_date: Option<DateTime<Utc>>,
+        due_date: Option<NaiveDate>,
         file: Option<PathBuf>,
         name: String,
         description: Option<String>,
