@@ -27,7 +27,8 @@ pub struct Task {
 impl fmt::Display for Task {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.cat.as_ref().map(|x| write!(f, "[{}] ", x));
-        writeln!(f, "{}", self.name)?;
+        write!(f, "{} ", self.name)?;
+        self.due_date.as_ref().map(|x| write!(f, "-{}-", x));
         Ok(())
     }
 }
@@ -56,6 +57,9 @@ impl Task {
             .as_ref()
             .map(|x| string.push_str(format!("[{}] ", x).as_str()));
         string.push_str(format!("{}: ", self.name).as_str());
+        self.due_date
+            .as_ref()
+            .map(|x| string.push_str(format!("-{}-", x).as_str()));
         string
     }
     pub fn long_print(&self) -> String {

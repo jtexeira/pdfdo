@@ -38,7 +38,7 @@ fn main() {
             tasks.rm(id);
             tasks.save("yeet.json").expect("Can't delete task");
         }
-        Commands::List {} => println!("{}", tasks),
+        Commands::List {} => print!("{}", tasks),
         _ => (),
     }
 }

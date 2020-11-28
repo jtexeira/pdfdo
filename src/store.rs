@@ -28,9 +28,9 @@ where
     T: Display,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.map.iter().for_each(|(x, y)| {
-            writeln!(f, "{}: {}", x, y);
-        });
+        self.map
+            .iter()
+            .try_for_each(|(x, y)| writeln!(f, "{}: {}", x, y))?;
         Ok(())
     }
 }
