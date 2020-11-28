@@ -11,9 +11,8 @@ fn main() {
     let args = Commands::from_args();
     let file = File::open("yeet.json")
         .map(BufReader::new)
-        .map(|x| serde_json::from_reader(x).ok())
         .ok()
-        .flatten();
+        .and_then(|x| serde_json::from_reader(x).ok());
 
     let mut tasks: StoreMap<Task> = file.unwrap_or_default();
     match args {

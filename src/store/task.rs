@@ -28,16 +28,8 @@ pub struct Task {
 
 impl fmt::Display for Task {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "{}", self.name)?;
-        self.cat.as_ref().map(|x| writeln!(f, "Category: {}", x));
-        self.due_date.map(|x| writeln!(f, "Due To: {}", x));
-        self.description
-            .as_ref()
-            .map(|x| writeln!(f, "Description: {}", x));
-        self.file
-            .as_ref()
-            .map(|x| writeln!(f, "File: {}", x.to_str().unwrap()));
-        self.url.as_ref().map(|x| writeln!(f, "Url: {}", x));
+        self.cat.as_ref().map(|x| write!(f, "[{}] ", x));
+        writeln!(f, "{}", self.name);
         Ok(())
     }
 }
@@ -59,5 +51,31 @@ impl Task {
             url,
             cat,
         }
+    }
+    pub fn short_print(&self) -> String {
+        let mut string = String::new();
+        self.cat
+            .as_ref()
+            .map(|x| string.push_str(format!("[{}] ", x).as_str()));
+        string.push_str(format!("{}: ", self.name).as_str());
+        string
+    }
+    pub fn long_print(&self) -> String {
+        let mut string = format!("{}\n", self.name);
+        self.cat
+            .as_ref()
+            .map(|x| string.push_str(format!("Category: {}", x).as_str()));
+        self.due_date
+            .map(|x| string.push_str(format!("Due To: {}", x).as_str()));
+        self.description
+            .as_ref()
+            .map(|x| string.push_str(format!("Description: {}", x).as_str()));
+        self.file
+            .as_ref()
+            .map(|x| string.push_str(format!("File: {}", x.to_str().unwrap()).as_str()));
+        self.url
+            .as_ref()
+            .map(|x| string.push_str(format!("Url: {}", x).as_str()));
+        string
     }
 }
