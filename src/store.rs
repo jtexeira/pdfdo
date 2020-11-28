@@ -8,24 +8,31 @@ use std::fs::OpenOptions;
 use std::io::BufWriter;
 
 #[derive(Serialize, Deserialize)]
-pub struct StoreMap<T> {
+pub struct StoreMap<K, T>
+where
+    K: Eq + std::hash::Hash,
+{
     //Maybe move to hashmap later
-    curr_id: usize,
-    map: HashMap<usize, T>,
+    curr_id: K,
+    map: HashMap<K, T>,
 }
 
-impl<T> Default for StoreMap<T> {
+impl<K, T> Default for StoreMap<K, T>
+where
+    K: Default + Eq + std::hash::Hash,
+{
     fn default() -> Self {
         StoreMap {
-            curr_id: 0,
+            curr_id: Default::default(),
             map: HashMap::new(),
         }
     }
 }
 
-impl<T> Display for StoreMap<T>
+impl<K, T> Display for StoreMap<K, T>
 where
     T: Display,
+    K: Display + Default + Eq + std::hash::Hash,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         self.map
@@ -34,23 +41,32 @@ where
         Ok(())
     }
 }
-
-impl<'a, T> StoreMap<T>
+impl<'a, T, K> StoreMap<K, T>
 where
-    T: 'a + Serialize + Deserialize<'a>,
+    K: Copy + Eq + std::hash::Hash + std::ops::AddAssign<usize>,
 {
-    pub fn add(&mut self, obj: T) {
+    pub fn add_us(&mut self, obj: T) {
         while self.map.contains_key(&self.curr_id) {
             self.curr_id += 1;
         }
         self.map.insert(self.curr_id, obj);
     }
+}
 
-    pub fn rm(&mut self, id: usize) {
+impl<'a, T, K> StoreMap<K, T>
+where
+    T: 'a + Serialize + Deserialize<'a>,
+    K: 'a + Serialize + Deserialize<'a> + Eq + std::hash::Hash,
+{
+    pub fn add(&mut self, key: K, obj: T) {
+        self.map.insert(key, obj);
+    }
+
+    pub fn rm(&mut self, id: K) {
         self.map.remove(&id);
     }
 
-    pub fn get(&self, id: usize) -> Option<&T> {
+    pub fn get(&self, id: K) -> Option<&T> {
         self.map.get(&id)
     }
 

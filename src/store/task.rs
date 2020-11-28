@@ -26,9 +26,7 @@ pub struct Task {
 
 impl fmt::Display for Task {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.cat.as_ref().map(|x| write!(f, "[{}] ", x));
-        write!(f, "{} ", self.name)?;
-        self.due_date.as_ref().map(|x| write!(f, "-{}-", x));
+        write!(f, "{}", self.short_print())?;
         Ok(())
     }
 }
@@ -53,31 +51,32 @@ impl Task {
     }
     pub fn short_print(&self) -> String {
         let mut string = String::new();
-        self.cat
-            .as_ref()
-            .map(|x| string.push_str(format!("[{}] ", x).as_str()));
+        if let Some(x) = self.cat.as_ref() {
+            string.push_str(format!("[{}] ", x).as_str());
+        }
         string.push_str(format!("{}: ", self.name).as_str());
-        self.due_date
-            .as_ref()
-            .map(|x| string.push_str(format!("-{}-", x).as_str()));
+        if let Some(x) = self.due_date.as_ref() {
+            string.push_str(format!("-{}-", x).as_str());
+        }
         string
     }
     pub fn long_print(&self) -> String {
         let mut string = format!("{}\n", self.name);
-        self.cat
-            .as_ref()
-            .map(|x| string.push_str(format!("Category: {}", x).as_str()));
-        self.due_date
-            .map(|x| string.push_str(format!("Due To: {}", x).as_str()));
-        self.description
-            .as_ref()
-            .map(|x| string.push_str(format!("Description: {}", x).as_str()));
-        self.file
-            .as_ref()
-            .map(|x| string.push_str(format!("File: {}", x.to_str().unwrap()).as_str()));
-        self.url
-            .as_ref()
-            .map(|x| string.push_str(format!("Url: {}", x).as_str()));
+        if let Some(x) = self.cat.as_ref() {
+            string.push_str(format!("Category: {}", x).as_str());
+        }
+        if let Some(x) = self.due_date {
+            string.push_str(format!("Due To: {}", x).as_str());
+        }
+        if let Some(x) = self.description.as_ref() {
+            string.push_str(format!("Description: {}", x).as_str());
+        }
+        if let Some(x) = self.file.as_ref() {
+            string.push_str(format!("File: {}", x.to_str().unwrap()).as_str());
+        }
+        if let Some(x) = self.url.as_ref() {
+            string.push_str(format!("Url: {}", x).as_str());
+        }
         string
     }
 }

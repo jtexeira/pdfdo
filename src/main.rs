@@ -1,10 +1,10 @@
 pub mod cli;
 pub mod store;
 
-use cli::Commands;
+use cli::{Categories, Commands};
 use std::fs::File;
 use std::io::BufReader;
-use store::{task::Task, StoreMap};
+use store::{cat::Category, task::Task, StoreMap};
 use structopt::StructOpt;
 
 fn main() {
@@ -14,7 +14,12 @@ fn main() {
         .ok()
         .and_then(|x| serde_json::from_reader(x).ok());
 
-    let mut tasks: StoreMap<Task> = file.unwrap_or_default();
+    let cat_reader = File::open("categories.json")
+        .map(BufReader::new)
+        .ok()
+        .and_then(|x| serde_json::from_reader(x).ok());
+    let mut tasks: StoreMap<usize, Task> = file.unwrap_or_default();
+    let mut cats: StoreMap<String, Category> = cat_reader.unwrap_or_default();
     match args {
         Commands::Add {
             due_date,
@@ -24,7 +29,7 @@ fn main() {
             url,
             cat,
         } => {
-            tasks.add(Task::new(due_date, file, name, description, url, cat));
+            tasks.add_us(Task::new(due_date, file, name, description, url, cat));
             tasks.save("yeet.json").expect("Can't save new task");
         }
         Commands::Get { id } => {
@@ -39,6 +44,27 @@ fn main() {
             tasks.save("yeet.json").expect("Can't delete task");
         }
         Commands::List {} => print!("{}", tasks),
+        Commands::Cat { cat } => {
+            match cat {
+                Categories::Add {
+                    name,
+                    description,
+                    url,
+                    work_dir,
+                } => {
+                    cats.add(
+                        name.clone(),
+                        Category::new(&name, description, url, work_dir),
+                    );
+                    cats.save("categories.json").expect("Can't save new task");
+                }
+                Categories::List {} => (),
+                Categories::Rm { id } => (),
+                Categories::Dir { id } => (),
+                Categories::Url { id } => (),
+                _ => (),
+            };
+        }
         _ => (),
     }
 }
