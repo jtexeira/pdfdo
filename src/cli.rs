@@ -48,14 +48,17 @@ pub enum Categories {
         #[structopt(long)]
         work_dir: Option<PathBuf>,
     },
+    Get {
+        id: String,
+    },
     List {},
     Rm {
-        id: usize,
+        id: String,
     },
     Url {
-        id: usize,
+        id: String,
     },
     Dir {
-        id: usize,
+        id: String,
     },
 }

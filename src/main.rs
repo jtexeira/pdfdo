@@ -33,14 +33,14 @@ fn main() {
             tasks.save("yeet.json").expect("Can't save new task");
         }
         Commands::Get { id } => {
-            if let Some(t) = tasks.get(id) {
+            if let Some(t) = tasks.get(&id) {
                 println!("{}: {}", id, t.long_print());
             } else {
                 eprintln!("Inexistent task");
             }
         }
         Commands::Rm { id } => {
-            tasks.rm(id);
+            tasks.rm(&id);
             tasks.save("yeet.json").expect("Can't delete task");
         }
         Commands::List {} => print!("{}", tasks),
@@ -58,10 +58,18 @@ fn main() {
                     );
                     cats.save("categories.json").expect("Can't save new task");
                 }
-                Categories::List {} => (),
-                Categories::Rm { id } => (),
-                Categories::Dir { id } => (),
-                Categories::Url { id } => (),
+                Categories::List {} => print!("{}", cats),
+                Categories::Rm { id } => {
+                    cats.rm(&id);
+                    cats.save("yeet.json").expect("Can't delete task");
+                }
+                Categories::Get { id } => {
+                    if let Some(t) = cats.get(&id) {
+                        println!("{}: {}", &id, t.long_print());
+                    } else {
+                        eprintln!("Inexistent task");
+                    }
+                }
                 _ => (),
             };
         }

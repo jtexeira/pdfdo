@@ -62,12 +62,12 @@ where
         self.map.insert(key, obj);
     }
 
-    pub fn rm(&mut self, id: K) {
-        self.map.remove(&id);
+    pub fn rm(&mut self, id: &K) {
+        self.map.remove(id);
     }
 
-    pub fn get(&self, id: K) -> Option<&T> {
-        self.map.get(&id)
+    pub fn get(&self, id: &K) -> Option<&T> {
+        self.map.get(id)
     }
 
     pub fn save(&self, path: &str) -> std::io::Result<()> {
