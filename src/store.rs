@@ -6,6 +6,7 @@ use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::fs::OpenOptions;
 use std::io::BufWriter;
+use std::path::PathBuf;
 
 #[derive(Serialize, Deserialize)]
 pub struct StoreMap<K, T>
@@ -70,7 +71,7 @@ where
         self.map.get(id)
     }
 
-    pub fn save(&self, path: &str) -> std::io::Result<()> {
+    pub fn save(&self, path: &PathBuf) -> std::io::Result<()> {
         let file = OpenOptions::new()
             .write(true)
             .truncate(true)

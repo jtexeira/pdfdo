@@ -12,3 +12,4 @@ url = {version = "*", features = ["serde"] }
 structopt = { version = "0.3", default-features = false }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+dirs = "3.0"

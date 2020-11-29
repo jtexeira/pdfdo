@@ -9,12 +9,17 @@ use structopt::StructOpt;
 
 fn main() {
     let args = Commands::from_args();
-    let file = File::open("yeet.json")
+
+    let mut tasks_path = dirs::cache_dir().unwrap();
+    tasks_path.push("pdfdo/categories.json");
+    let file = File::open(&tasks_path)
         .map(BufReader::new)
         .ok()
         .and_then(|x| serde_json::from_reader(x).ok());
 
-    let cat_reader = File::open("categories.json")
+    let mut cats_path = dirs::cache_dir().unwrap();
+    cats_path.push("pdfdo/categories.json");
+    let cat_reader = File::open(&cats_path)
         .map(BufReader::new)
         .ok()
         .and_then(|x| serde_json::from_reader(x).ok());
@@ -30,7 +35,7 @@ fn main() {
             cat,
         } => {
             tasks.add_us(Task::new(due_date, file, name, description, url, cat));
-            tasks.save("yeet.json").expect("Can't save new task");
+            tasks.save(&tasks_path).expect("Can't save new task");
         }
         Commands::Get { id } => {
             if let Some(t) = tasks.get(&id) {
@@ -41,7 +46,7 @@ fn main() {
         }
         Commands::Rm { id } => {
             tasks.rm(&id);
-            tasks.save("yeet.json").expect("Can't delete task");
+            tasks.save(&tasks_path).expect("Can't delete task");
         }
         Commands::List {} => print!("{}", tasks),
         Commands::Cat { cat } => {
@@ -56,12 +61,12 @@ fn main() {
                         name.clone(),
                         Category::new(&name, description, url, work_dir),
                     );
-                    cats.save("categories.json").expect("Can't save new task");
+                    cats.save(&cats_path).expect("Can't save new task");
                 }
                 Categories::List {} => print!("{}", cats),
                 Categories::Rm { id } => {
                     cats.rm(&id);
-                    cats.save("yeet.json").expect("Can't delete task");
+                    cats.save(&cats_path).expect("Can't delete task");
                 }
                 Categories::Get { id } => {
                     if let Some(t) = cats.get(&id) {
