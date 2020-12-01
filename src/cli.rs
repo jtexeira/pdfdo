@@ -50,6 +50,10 @@ pub enum Categories {
     },
     Get {
         id: String,
+        #[structopt(long)]
+        url: bool,
+        #[structopt(long)]
+        pwd: bool,
     },
     List {},
     Rm {

@@ -72,10 +72,11 @@ where
     }
 
     pub fn save(&self, path: &PathBuf) -> std::io::Result<()> {
+        std::fs::create_dir_all(&path.parent().unwrap())?;
         let file = OpenOptions::new()
             .write(true)
             .truncate(true)
-            .create(true)
+            .create_new(true)
             .open(path)?;
         let writer = BufWriter::new(file);
         serde_json::to_writer_pretty(writer, &self)?;

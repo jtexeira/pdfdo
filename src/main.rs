@@ -68,9 +68,19 @@ fn main() {
                     cats.rm(&id);
                     cats.save(&cats_path).expect("Can't delete task");
                 }
-                Categories::Get { id } => {
+                Categories::Get { id, url, pwd } => {
                     if let Some(t) = cats.get(&id) {
-                        println!("{}: {}", &id, t.long_print());
+                        if url && pwd || !url && !pwd {
+                            println!("{}", t.long_print());
+                        } else if pwd {
+                            if let Some(p) = &t.work_dir {
+                                println!("{}", p.to_str().unwrap());
+                            }
+                        } else if url {
+                            if let Some(p) = &t.url {
+                                println!("{}", p.as_str());
+                            }
+                        }
                     } else {
                         eprintln!("Inexistent task");
                     }

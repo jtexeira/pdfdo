@@ -11,16 +11,15 @@ pub struct Category {
     description: Option<String>,
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
-    url: Option<Url>,
+    pub url: Option<Url>,
     #[serde(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
-    work_dir: Option<PathBuf>,
+    pub work_dir: Option<PathBuf>,
 }
 
 impl fmt::Display for Category {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.name)?;
-        self.description.as_ref().map(|x| write!(f, ": {}", x));
+        self.description.as_ref().map(|x| write!(f, "{}", x));
         Ok(())
     }
 }
