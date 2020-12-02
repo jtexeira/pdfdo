@@ -37,9 +37,23 @@ fn main() {
             tasks.add_us(Task::new(due_date, file, name, description, url, cat));
             tasks.save(&tasks_path).expect("Can't save new task");
         }
-        Commands::Get { id } => {
+        Commands::Get { id, url, pwd, file } => {
             if let Some(t) = tasks.get(&id) {
-                println!("{}: {}", id, t.long_print());
+                if url && pwd && file || !url && !pwd && !file {
+                    println!("{}", t.long_print());
+                } else if pwd {
+                    if let Some(p) = &t.get_work_dir() {
+                        println!("{}", p.to_str().unwrap());
+                    }
+                } else if file {
+                    if let Some(p) = &t.file {
+                        println!("{}", p.to_str().unwrap());
+                    }
+                } else if url {
+                    if let Some(p) = &t.url {
+                        println!("{}", p.as_str());
+                    }
+                }
             } else {
                 eprintln!("Inexistent task");
             }
@@ -85,9 +99,7 @@ fn main() {
                         eprintln!("Inexistent task");
                     }
                 }
-                _ => (),
             };
         }
-        _ => (),
     }
 }

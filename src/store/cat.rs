@@ -41,13 +41,13 @@ impl Category {
     pub fn long_print(&self) -> String {
         let mut string = format!("{}\n", self.name);
         if let Some(x) = self.description.as_ref() {
-            string.push_str(format!("Description: {}", x).as_str());
+            string.push_str(format!("Description: {}\n", x).as_str());
         }
         if let Some(x) = self.url.as_ref() {
-            string.push_str(format!("Url: {}", x).as_str());
+            string.push_str(format!("Url: {}\n", x).as_str());
         }
         if let Some(x) = self.work_dir.as_ref() {
-            string.push_str(format!("Work Directory: {}", x.to_str().unwrap()).as_str());
+            string.push_str(format!("Work Directory: {}\n", x.to_str().unwrap()).as_str());
         }
         string
     }

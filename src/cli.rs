@@ -8,12 +8,12 @@ pub enum Commands {
     List {},
     Get {
         id: usize,
-    },
-    File {
-        id: usize,
-    },
-    Url {
-        id: usize,
+        #[structopt(long)]
+        url: bool,
+        #[structopt(long)]
+        pwd: bool,
+        #[structopt(long)]
+        file: bool,
     },
     Add {
         name: String,
@@ -57,12 +57,6 @@ pub enum Categories {
     },
     List {},
     Rm {
-        id: String,
-    },
-    Url {
-        id: String,
-    },
-    Dir {
         id: String,
     },
 }

@@ -6,16 +6,16 @@ use url::Url;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
-    pub name: String,
+    name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub due_date: Option<NaiveDate>,
+    due_date: Option<NaiveDate>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub file: Option<PathBuf>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub description: Option<String>,
+    description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub url: Option<Url>,
@@ -63,20 +63,28 @@ impl Task {
     pub fn long_print(&self) -> String {
         let mut string = format!("{}\n", self.name);
         if let Some(x) = self.cat.as_ref() {
-            string.push_str(format!("Category: {}", x).as_str());
+            string.push_str(format!("Category: {}\n", x).as_str());
         }
         if let Some(x) = self.due_date {
-            string.push_str(format!("Due To: {}", x).as_str());
+            string.push_str(format!("Due To: {}\n", x).as_str());
         }
         if let Some(x) = self.description.as_ref() {
-            string.push_str(format!("Description: {}", x).as_str());
+            string.push_str(format!("Description: {}\n", x).as_str());
         }
         if let Some(x) = self.file.as_ref() {
-            string.push_str(format!("File: {}", x.to_str().unwrap()).as_str());
+            string.push_str(format!("File: {}\n", x.to_str().unwrap()).as_str());
         }
         if let Some(x) = self.url.as_ref() {
-            string.push_str(format!("Url: {}", x).as_str());
+            string.push_str(format!("Url: {}\n", x).as_str());
         }
         string
+    }
+    pub fn get_work_dir(&self) -> Option<PathBuf> {
+        if let Some(s) = &self.file {
+            let mut z = s.clone();
+            z.pop();
+            return Some(z);
+        }
+        None
     }
 }
