@@ -11,7 +11,7 @@ fn main() {
     let args = Commands::from_args();
 
     let mut tasks_path = dirs::cache_dir().unwrap();
-    tasks_path.push("pdfdo/categories.json");
+    tasks_path.push("pdfdo/tasks.json");
     let file = File::open(&tasks_path)
         .map(BufReader::new)
         .ok()

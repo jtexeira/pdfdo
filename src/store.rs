@@ -76,7 +76,7 @@ where
         let file = OpenOptions::new()
             .write(true)
             .truncate(true)
-            .create_new(true)
+            .create(true)
             .open(path)?;
         let writer = BufWriter::new(file);
         serde_json::to_writer_pretty(writer, &self)?;
