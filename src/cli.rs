@@ -35,6 +35,21 @@ pub enum Commands {
         #[structopt(subcommand)]
         cat: Categories,
     },
+    Update {
+        id: usize,
+        #[structopt(long)]
+        name: Option<String>,
+        #[structopt(long)]
+        cat: Option<String>,
+        #[structopt(long)]
+        due_date: Option<NaiveDate>,
+        #[structopt(long)]
+        file: Option<PathBuf>,
+        #[structopt(long)]
+        description: Option<String>,
+        #[structopt(long)]
+        url: Option<Url>,
+    },
 }
 
 #[derive(StructOpt)]

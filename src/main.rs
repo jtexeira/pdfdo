@@ -58,6 +58,20 @@ fn main() {
                 eprintln!("Inexistent task");
             }
         }
+        Commands::Update {
+            id,
+            due_date,
+            file,
+            name,
+            description,
+            url,
+            cat,
+        } => {
+            if let Some(t) = tasks.map.get_mut(&id) {
+                t.update(due_date, file, name, description, url, cat);
+                tasks.save(&tasks_path).expect("Can't save new task");
+            }
+        }
         Commands::Rm { id } => {
             tasks.rm(&id);
             tasks.save(&tasks_path).expect("Can't delete task");

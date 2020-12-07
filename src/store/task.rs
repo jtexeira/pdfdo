@@ -6,16 +6,16 @@ use url::Url;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
-    name: String,
+    pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    due_date: Option<NaiveDate>,
+    pub due_date: Option<NaiveDate>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub file: Option<PathBuf>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub url: Option<Url>,
@@ -86,5 +86,33 @@ impl Task {
             return Some(z);
         }
         None
+    }
+    pub fn update(
+        &mut self,
+        due_date: Option<NaiveDate>,
+        file: Option<PathBuf>,
+        name: Option<String>,
+        description: Option<String>,
+        url: Option<Url>,
+        cat: Option<String>,
+    ) {
+        if due_date.is_some() {
+            self.due_date = due_date
+        };
+        if file.is_some() {
+            self.file = file
+        };
+        if let Some(d) = name {
+            self.name = d
+        };
+        if description.is_some() {
+            self.description = description
+        };
+        if url.is_some() {
+            self.url = url
+        };
+        if cat.is_some() {
+            self.cat = cat
+        };
     }
 }

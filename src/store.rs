@@ -15,7 +15,7 @@ where
 {
     //Maybe move to hashmap later
     curr_id: K,
-    map: HashMap<K, T>,
+    pub map: HashMap<K, T>,
 }
 
 impl<K, T> Default for StoreMap<K, T>
