@@ -51,4 +51,24 @@ impl Category {
         }
         string
     }
+    pub fn update(
+        &mut self,
+        name: Option<String>,
+        description: Option<String>,
+        url: Option<Url>,
+        work_dir: Option<PathBuf>,
+    ) {
+        if let Some(n) = name {
+            self.name = n;
+        }
+        if description.is_some() {
+            self.description = description;
+        }
+        if url.is_some() {
+            self.url = url;
+        }
+        if work_dir.is_some() {
+            self.work_dir = work_dir;
+        }
+    }
 }

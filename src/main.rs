@@ -76,7 +76,22 @@ fn main() {
             tasks.rm(&id);
             tasks.save(&tasks_path).expect("Can't delete task");
         }
-        Commands::List {} => print!("{}", tasks),
+        Commands::List { cat: _, due_date } => {
+            let l: Vec<usize> = tasks
+                .map
+                .iter()
+                .filter(|(_k, v)| {
+                    (due_date && v.due_date.is_none())
+                        || (v.due_date.is_some()
+                            && chrono::offset::Utc::now().naive_utc().date() >= v.due_date.unwrap())
+                })
+                .map(|(k, _v)| k.to_owned())
+                .collect();
+            l.iter().for_each(|x| {
+                tasks.map.remove(x);
+            });
+            print!("{}", tasks);
+        }
         Commands::Cat { cat } => {
             match cat {
                 Categories::Add {
@@ -89,6 +104,18 @@ fn main() {
                         name.clone(),
                         Category::new(&name, description, url, work_dir),
                     );
+                    cats.save(&cats_path).expect("Can't save new task");
+                }
+                Categories::Update {
+                    id,
+                    name,
+                    description,
+                    url,
+                    work_dir,
+                } => {
+                    if let Some(t) = cats.map.get_mut(&id) {
+                        t.update(name, description, url, work_dir);
+                    }
                     cats.save(&cats_path).expect("Can't save new task");
                 }
                 Categories::List {} => print!("{}", cats),

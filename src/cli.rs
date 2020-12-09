@@ -5,7 +5,12 @@ use url::Url;
 
 #[derive(StructOpt)]
 pub enum Commands {
-    List {},
+    List {
+        #[structopt(long)]
+        cat: Option<String>,
+        #[structopt(long)]
+        due_date: bool,
+    },
     Get {
         id: usize,
         #[structopt(long)]
@@ -56,6 +61,17 @@ pub enum Commands {
 pub enum Categories {
     Add {
         name: String,
+        #[structopt(long)]
+        description: Option<String>,
+        #[structopt(long)]
+        url: Option<Url>,
+        #[structopt(long)]
+        work_dir: Option<PathBuf>,
+    },
+    Update {
+        id: String,
+        #[structopt(long)]
+        name: Option<String>,
         #[structopt(long)]
         description: Option<String>,
         #[structopt(long)]
