@@ -33,15 +33,17 @@ where
 impl<K, T> Display for StoreMap<K, T>
 where
     T: Display,
-    K: Display + Default + Eq + std::hash::Hash,
+    K: Display + Default + Eq + std::hash::Hash + Ord,
 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        self.map
-            .iter()
+        let mut vec = self.map.iter().collect::<Vec<(&K, &T)>>();
+        vec.sort_by_key(|(k, _v)| *k);
+        vec.iter()
             .try_for_each(|(x, y)| writeln!(f, "{}: {}", x, y))?;
         Ok(())
     }
 }
+
 impl<'a, T, K> StoreMap<K, T>
 where
     K: Copy + Eq + std::hash::Hash + std::ops::AddAssign<usize>,

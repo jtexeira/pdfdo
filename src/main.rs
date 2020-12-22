@@ -83,7 +83,7 @@ fn main() {
                 .filter(|(_k, v)| {
                     (due_date && v.due_date.is_none())
                         || (v.due_date.is_some()
-                            && chrono::offset::Utc::now().naive_utc().date() >= v.due_date.unwrap())
+                            && chrono::offset::Utc::now().naive_utc().date() > v.due_date.unwrap())
                 })
                 .map(|(k, _v)| k.to_owned())
                 .collect();
